@@ -59,3 +59,41 @@ class User(AbstractBaseUser):
     
     def has_module_perms(self, app_label):
         return True
+
+
+class Product(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    title = models.CharField(max_length=120, null=True)
+    price = models.PositiveIntegerField(null=True)
+    description = models.TextField(blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.title)
+
+    @property
+    def custom_fields(self):
+        return self.owner.customfield_set.all()
+
+    @property
+    def custom_product_fields(self):
+        return self.customproductfield_set.all()
+    
+
+
+class CustomField(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    name = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class CustomProductField(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    custom_field = models.ForeignKey(CustomField, on_delete=models.CASCADE, blank=True, null=True)
+    value = models.FloatField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.custom_field)

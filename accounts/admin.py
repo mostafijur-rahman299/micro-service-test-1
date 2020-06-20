@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from accounts.models import User
+from accounts.models import User, Product, CustomField, CustomProductField
 
+model = [User, Product, CustomField, CustomProductField]
 
-admin.site.register(User)
+admin.site.register(model)
